@@ -8,16 +8,18 @@ import pytest
 from pg_logical_replication.client import LogicalReplicationClient
 from pg_logical_replication.models import Wal2JsonOutput
 
-# Test configuration
-TEST_CONFIG = {
-    "host": os.getenv("POSTGRES_HOST", "localhost"),
-    "port": int(os.getenv("POSTGRES_PORT", "54320")),
-    "user": "postgres",
-    "password": "postgrespw",
-    "database": "playground",
-}
-
-TEST_DSN = f"postgresql://{TEST_CONFIG['user']}:{TEST_CONFIG['password']}@{TEST_CONFIG['host']}:{TEST_CONFIG['port']}/{TEST_CONFIG['database']}"
+# Get DSN directly if provided, otherwise build from components
+TEST_DSN = os.getenv("TEST_DSN")
+if not TEST_DSN:
+    # Test configuration for local development
+    TEST_CONFIG = {
+        "host": os.getenv("POSTGRES_HOST", "localhost"),
+        "port": int(os.getenv("POSTGRES_PORT", "54320")),
+        "user": "postgres",
+        "password": "postgrespw",
+        "database": "playground",
+    }
+    TEST_DSN = f"postgresql://{TEST_CONFIG['user']}:{TEST_CONFIG['password']}@{TEST_CONFIG['host']}:{TEST_CONFIG['port']}/{TEST_CONFIG['database']}"
 
 
 @pytest.fixture(scope="session")

@@ -12,8 +12,15 @@ fi
 IMAGE_NAME="$DOCKER_REPO/pg-logical-replication"
 TAG="17"
 
-echo "Building image $IMAGE_NAME:$TAG"
-docker build -t "$IMAGE_NAME:$TAG" .
+# Enable Docker BuildKit
+export DOCKER_BUILDKIT=1
 
-echo "Pushing image $IMAGE_NAME:$TAG"
-docker push "$IMAGE_NAME:$TAG"
+# Create a builder instance
+docker buildx create --use --name multiarch-builder || true
+
+# Build and push multi-architecture image
+echo "Building multi-arch image $IMAGE_NAME:$TAG"
+docker buildx build --platform linux/amd64,linux/arm64 \
+    -t "$IMAGE_NAME:$TAG" \
+    --push \
+    .
