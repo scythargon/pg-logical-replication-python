@@ -1,5 +1,7 @@
 # PostgreSQL Logical Replication Client for Python
 
+[![Python Tests](https://github.com/scythargon/pg-logical-replication-python/actions/workflows/python-tests.yml/badge.svg)](https://github.com/scythargon/pg-logical-replication-python/actions/workflows/python-tests.yml)
+
 A lightweight Python client for PostgreSQL logical replication using psycopg2 and wal2json plugin. Enables basic Change Data Capture (CDC) by streaming database changes through the replication protocol. Supports PostgreSQL 17.
 
 ## Key Features
