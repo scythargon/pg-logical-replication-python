@@ -12,7 +12,7 @@ jobs:
     
     services:
       postgres:
-        image: ${{ secrets.DOCKERHUB_USERNAME }}/pg-logical-replication:17
+        image: scythargon/pg-logical-replication:17
         env:
           POSTGRES_DB: playground
           POSTGRES_USER: postgres

@@ -18,7 +18,7 @@ A lightweight Python client for PostgreSQL logical replication using psycopg2 an
 ## Installation
 
 ```bash
-poetry add pg-logical-replication
+poetry add git+https://github.com/scythargon/pg-logical-replication-python.git
 ```
 
 ## Usage
