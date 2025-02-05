@@ -1,7 +1,7 @@
-FROM postgres:17
+FROM postgres:14
 
 RUN apt-get update && \
-    apt-get install -y postgresql-17-wal2json postgresql-17-decoderbufs && \
+    apt-get install -y postgresql-14-wal2json postgresql-14-decoderbufs && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 

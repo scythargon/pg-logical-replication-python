@@ -28,6 +28,35 @@ def pg_client():
     yield conn
     conn.close()
 
+@pytest.fixture(scope="session", autouse=True)
+def setup_database(pg_client):
+    with pg_client.cursor() as cur:
+        # Create users table
+        cur.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id BIGINT GENERATED ALWAYS AS IDENTITY,
+            PRIMARY KEY(id),
+            firstname TEXT NOT NULL,
+            lastname TEXT NOT NULL,
+            email VARCHAR(1000),
+            phone VARCHAR(1000),
+            deleted boolean NOT NULL DEFAULT false,
+            created timestamp with time zone NOT NULL DEFAULT NOW()
+        );
+        """)
+        
+        # Set REPLICA IDENTITY to FULL for proper UPDATE tracking
+        cur.execute("ALTER TABLE users REPLICA IDENTITY FULL;")
+        
+        # Insert initial test data
+        cur.execute("""
+        INSERT INTO users(firstname, lastname, email, phone)
+        SELECT md5(RANDOM()::TEXT), md5(RANDOM()::TEXT), md5(RANDOM()::TEXT), md5(RANDOM()::TEXT) 
+        FROM generate_series(1, 100);
+        """)
+        
+    pg_client.commit()
+
 
 def test_insert_and_delete():
     changes: List[Dict[str, Any]] = []
